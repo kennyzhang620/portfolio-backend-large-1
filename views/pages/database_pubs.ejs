@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <link href="/sfu-research-db/stylesheets/table_styler.css" rel="stylesheet" type="text/css">
+    <title></title>
+</head>
+<body>
+    <div id="description" style="font-weight:600; padding: 10px;">Database Management System (Publications)</div>
+    <div id="description" style="font-weight:600; padding: 10px; float:right;"><%= sfu_id %> in Production as <%= db_type %>.</div>
+    <input type="text" id="search_bar" placeholder="Search for records" style="width: 99.5%;" oninput="searchDB()" />
+    <div class="main_editor" style="width: 100%; overflow: scroll;">
+        <table>
+            <tr>
+                <td>Latitude (AutoFill capable)</td>
+                <td>Longitude (AutoFill capable)</td>
+                <td>Publication Title</td>
+                <td>Faculty of Education Author</td>
+                <td>Co-Author</td>
+                <td>Institution</td>
+                <td>Region</td>
+                <td>Year</td>
+                <td>Reference</td>
+            </tr>
+            <tr>
+                <td><input id="1" type="text" /></td>
+                <td><input id="1" type="text" /></td>
+                <td><input id="1" type="text" /></td>
+                <td><input id="1" type="text" /></td>
+                <td><input id="1" type="text" /></td>
+                <td><input id="1" type="text" /></td>
+                <td>
+                    <select name="region_sel" id="add_region">
+                        <option value="North America">North America</option>
+                        <option value="South America">South America</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Asia">Asia</option>
+                        <option value="Middle East">Middle East</option>
+                        <option value="Africa">Africa</option>
+                        <option value="Oceania">Oceania</option>
+                    </select>
+                </td>
+                <td><input id="1" type="number" value="2012" /></td>
+                <td><input id="1" type="text" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="navigator" style="float:right; padding: 6px;">
+        <button onclick="movePtr(-1)">Previous</button><index id="counter_id"style="padding: 6px;">0-10</index><button onclick="movePtr(1)">Next</button>
+    </div>
+    <div id="entry_add">
+        <div id="description" style="font-weight:600; padding: 10px; ">Add New Database Entry</div>
+        <div class="add_entry" style="width: 100%; padding-bottom: 60px; overflow: scroll;">
+
+            <table>
+                <tr>
+                    <td>Latitude (Required)</td>
+                    <td>Longitude (Required)</td>
+                    <td>Publication Title (Required)</td>
+                    <td>Faculty of Education Author</td>
+                    <td>Co-Author</td>
+                    <td>Institution</td>
+                    <td>Region</td>
+                    <td>Year (Required)</td>
+                    <td>Reference</td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="add_entry" id="add_lat" value="" oninput="updateDB(updateList.length - 1)" onclick='indicate("add_lat", numeric_not_empty)' onkeyup='indicate("add_lat", numeric_not_empty)'></td>
+                    <td><input type="number" name="add_entry" id="add_long" value="" oninput="updateDB(updateList.length - 1)"onclick='indicate("add_long", numeric_not_empty)' onkeyup='indicate("add_long", numeric_not_empty)'></td>
+                    <td><input type="text" name="add_entry" id="add_proj" value="" oninput="updateDB(updateList.length - 1)" onclick='indicate("add_proj", not_empty)' onkeyup='indicate("add_proj", not_empty)'></td>
+                    <td><input type="text" name="add_entry" id="add_auth" value="" oninput="updateDB(updateList.length - 1)"></td>
+                    <td><input type="text" name="add_entry"id="add_cauth" value="" oninput="updateDB(updateList.length - 1)"></td>
+                    <td><input type="text" name="add_entry" id="add_inst" value="" oninput="updateDB(updateList.length - 1)"></td>
+                    <td>
+                        <select name="add_entry" id="add_region">
+                            <option value="North America">North America</option>
+                            <option value="South America">South America</option>
+                            <option value="Europe">Europe</option>
+                            <option value="Asia">Asia</option>
+                            <option value="Middle East">Middle East</option>
+                            <option value="Africa">Africa</option>
+                            <option value="Oceania">Oceania</option>
+                        </select>
+
+                    </td>
+                    <td><input type="number" name="add_entry" id="add_yr" value="" oninput="updateDB(updateList.length - 1)" onclick='indicate("add_yr", numeric_not_empty)' onkeyup='indicate("add_yr", numeric_not_empty)'></td>
+                    <td><input type="text" name="add_entry" id="add_ref" value="" oninput="updateDB(updateList.length - 1)"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="options">
+        <!--<div id="selector"><input type="image" style="width: 60px; height: 60px;" src="icons/add_plant.png"></div>-->
+        <div id="selector">
+            <% if(db_type == "Administrator"){ %>
+            <div class="tooltip">
+                <input type="image" style="width: 25px; height: 25px;" src="/sfu-research-db/icons/console.png" id="submit_updates" onclick="consoleSQL()">
+                <span class="tooltiptext">Run a limited set of SQL commands directly from the app.</span>
+            </div>
+            <% } %>
+            <% if(db_type == "Manager" || db_type == "Administrator"){ %>
+            <div class="tooltip">
+                <input type="image" style="width: 30px; height: 30px;" src="/sfu-research-db/icons/delete_all.png" id="submit_updates" onclick="deleteAll()">
+                <span class="tooltiptext">Delete all visible data entries.</span>
+            </div>
+            <div class="tooltip">
+                <input type="image" style="width: 40px; height: 40px;" src="/sfu-research-db/icons/add_csv.png" id="csv_upload" onclick="manualHandler(event)">
+                <span class="tooltiptext">Bulk add entries directly from a csv file.</span>
+            </div>
+            <% } %>
+            <div class="tooltip">
+                <input type="image" style="width: 60px; height: 60px;" src="/sfu-research-db/icons/upload_file.png" id="submit_updates" onclick="sendUpdates()">
+                <span class="tooltiptext">Update the database.</span>
+            </div>
+            <div class="tooltip">
+                <input type="image" style="width: 30px; height: 30px;" src="/sfu-research-db/icons/logout.png" onclick="window.location.replace('/sfu-research-db/logout')">
+                <span class="tooltiptext">Log out of the database management system.</span>
+            </div>
+        </div>
+    </div>
+    <script src="/sfu-research-db/scripts/render_table_plot.js"></script>
+</body>
+</html>
