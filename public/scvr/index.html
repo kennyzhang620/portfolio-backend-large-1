@@ -1,0 +1,145 @@
+<!-- Adapted from https://github.com/greggman/better-unity-webgl-template/blob/master/Assets/WebGLTemplates/BetterTemplate/index.html -->
+<!-- 26 June 2020 -->
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ScienceWorldAR</title>
+    <script type="text/javascript" src="https://libs.zappar.com/zappar-cv/0.2.12/zappar-cv.js"></script>
+    <style>
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: #444;
+        }
+
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* try to handle mobile dialog */
+        canvas+* {
+            z-index: 2;
+        }
+
+        .progress-custom {
+            margin: 1.5em;
+            border: 1px solid white;
+            width: 50vw;
+            display: none;
+        }
+
+        .progress-custom .full {
+            margin: 2px;
+            background: white;
+            height: 1em;
+            transform-origin: top left;
+        }
+
+        .custom-z {
+            z-index: 2000;
+        }
+
+        #loader {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: transparent !important;
+            border: none !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" </head>
+</head>
+
+<body>
+
+    <div id="gameContainer"></div>
+    <div id="loader">
+        <div class="progress-custom">
+            <div class="full"></div>
+        </div>
+    </div>
+    <div height="65%" class="modal fade custom-z" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-z">
+            <div class="modal-content custom-z">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn btn-danger btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body custom-z" height="60%">
+                    <video id="video-player" width="100%" preload="auto" controls autoplay>
+                        <source id="video-source" src="https://cei.sciencevr.ca/videos/queenbee.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        var myModalEl = document.getElementById('exampleModal');
+        var videoPlayer = document.getElementById('video-player');
+        myModalEl.addEventListener('hidden.bs.modal', function (event) {
+            videoPlayer.pause();
+            videoPlayer.currentTime = 0;
+        });
+
+    </script>
+</body>
+
+<script src="Build/UnityLoader.js"></script>
+<script>
+    var gameInstance = gameInstance = UnityLoader.instantiate("gameContainer", "Build/scvr.json", { onProgress: UnityProgress });
+
+    function UnityProgress(gameInstance, progress) {
+        if (!gameInstance.Module) {
+            return;
+        }
+        const loader = document.querySelector("#loader");
+        if (!gameInstance.progress) {
+            const progress = document.querySelector("#loader .progress-custom");
+            progress.style.display = "block";
+            gameInstance.progress = progress.querySelector(".full");
+        }
+        gameInstance.progress.style.transform = `scaleX(${progress})`;
+        if (progress === 1 && !gameInstance.removeTimeout) {
+            gameInstance.removeTimeout = setTimeout(function () {
+                loader.style.display = "none";
+            }, 0); // optionally set a delay in here.
+        }
+    }
+
+
+</script>
+
+</html>
