@@ -145,7 +145,7 @@ def ExtractEquityData(splice):
     return equPacket
 
 
-def sendNotifyEmail(receiver_email, message):
+def #sendNotifyEmail(receiver_email, message):
     port = 587  # For starttls
     smtp_server = "smtp-mail.outlook.com"
     sender_email = params[0]
@@ -185,7 +185,7 @@ def getEquityData(equity):
 equities = []
 Stats_Plot = []
 
-#sendNotifyEmail("kennyz620@hotmail.com", "Kenny");
+##sendNotifyEmail("kennyz620@hotmail.com", "Kenny");
 
 def init():
     equities.clear()
@@ -297,7 +297,7 @@ def run_server():
 
     if (test != None):
         print("Server started.")
-        sendNotifyEmail("kennyz620@hotmail.com", messageStatus("Server on."));
+        #sendNotifyEmail("kennyz620@hotmail.com", messageStatus("Server on."));
     else:
         print("Querying issue detected. Check network connection. Otherwise update the script.")
         exit();
@@ -319,20 +319,20 @@ def run_server():
                     f.close()
                 except:
                     print("Failed to log event")
-                    sendNotifyEmail("kennyz620@hotmail.com", messageError("Unable to log event"))
+                    #sendNotifyEmail("kennyz620@hotmail.com", messageError("Unable to log event"))
             else:
                 print("Unable to query equity")
-                sendNotifyEmail("kennyz620@hotmail.com", messageError("Query failed."))
+                #sendNotifyEmail("kennyz620@hotmail.com", messageError("Query failed."))
 
         if (totalInv < lowerB):
             print("Warning! Investment value below minimum!")
             if (flags[0] == False):
-                sendNotifyEmail("kennyz620@hotmail.com", messageLB(name));
+                #sendNotifyEmail("kennyz620@hotmail.com", messageLB(name));
                 flags[0] = True
             elif (totalInv > upperB):
                 print("Yatta! Investment value rose above set maximum!")
                 if (flags[1] == False):
-                    sendNotifyEmail("kennyz620@hotmail.com", messageUB(name));
+                    #sendNotifyEmail("kennyz620@hotmail.com", messageUB(name));
                     flags[1] = True
                 else:
                     flags[0] = False
@@ -346,7 +346,7 @@ def run_server():
             f.close()
         except:
             print("Failed to log event")
-            sendNotifyEmail("kennyz620@hotmail.com", messageError("Unable to log event"))
+            #sendNotifyEmail("kennyz620@hotmail.com", messageError("Unable to log event"))
 
         try:
             f = open(extPath + "stats.txt", "w")
