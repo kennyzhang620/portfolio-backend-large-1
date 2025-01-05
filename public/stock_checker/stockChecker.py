@@ -103,7 +103,7 @@ def scanStr(text):
     currWrd = ""
     for char in text:
 
-        if (char != '<' and char != '>'):
+        if (char != '<' and char != '>' and char != ' '):
 
             currWrd += char
         else:
@@ -161,18 +161,17 @@ def sendNotifyEmail(receiver_email, message):
             server.sendmail(sender_email, receiver_email, message)
 
 
-
 def getEquityData(equity):
 
     res = downloadData(equity);
     tokenized = scanStr(res);
-
-    ind = findInd('Fw(b) Fz(36px) Mb(-4px) D(ib)', tokenized)
+    
+    ind = findInd('yf-1tejb6"', tokenized)
 
     if (ind != None):
         #print(tokenized[ind:ind+11])
         #print(ExtractEquityData(tokenized[ind:ind+11]))
-        return [equity] + ExtractEquityData(tokenized[ind:ind+11])
+        return [equity] + ExtractEquityData(tokenized[ind+18:ind+20])
 
     try:
         f = open(extPath + "test.html", "w")
@@ -180,6 +179,8 @@ def getEquityData(equity):
         f.close()
     except:
         print("Error with query")
+        
+    print("No equity found")
 
 equities = []
 Stats_Plot = []
