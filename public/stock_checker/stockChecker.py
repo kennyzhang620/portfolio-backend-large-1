@@ -145,7 +145,7 @@ def ExtractEquityData(splice):
     return equPacket
 
 
-def #sendNotifyEmail(receiver_email, message):
+def sendNotifyEmail(receiver_email, message):
     port = 587  # For starttls
     smtp_server = "smtp-mail.outlook.com"
     sender_email = params[0]
